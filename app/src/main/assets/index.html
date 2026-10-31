@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#172b28">
+<title>Мера — замеры и сметы</title>
+<style>
+:root{--bg:#f3f5f2;--card:#fff;--ink:#172b28;--muted:#687873;--line:#e1e8e3;--accent:#176b55;--soft:#e8f2ed;--danger:#b43b35}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:#172b28;color:#fff;padding:22px 18px 18px;position:sticky;top:0;z-index:5}
+.brand{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#a8c9bb;font-weight:700}.head{display:flex;align-items:center;justify-content:space-between;gap:12px}h1{font-size:25px;margin:5px 0 0}.sub{font-size:12px;color:#c0d0ca;margin-top:4px}
+nav{display:flex;gap:7px;padding:12px 12px 4px;overflow:auto;background:var(--bg);position:sticky;top:91px;z-index:4}
+nav button{border:1px solid var(--line);background:#fff;color:var(--muted);border-radius:999px;padding:10px 14px;white-space:nowrap;font-weight:650}
+nav button.active{background:var(--ink);border-color:var(--ink);color:#fff}
+main{padding:12px;max-width:760px;margin:auto}.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:0 0 13px;box-shadow:0 3px 14px #152d2410}
+h2{font-size:18px;margin:0 0 14px}.muted{color:var(--muted);font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:11px}label{display:block;font-size:12px;color:var(--muted);font-weight:650;margin-bottom:6px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:11px;padding:12px;background:#fff;color:var(--ink);font:inherit;min-width:0}textarea{min-height:75px;resize:vertical}.btn{border:0;border-radius:12px;background:var(--accent);color:#fff;padding:12px 15px;font:700 14px system-ui;cursor:pointer}.btn.secondary{background:var(--soft);color:var(--accent)}.btn.danger{background:#faecea;color:var(--danger)}.btn.small{padding:8px 10px;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}.result{background:var(--ink);color:#fff;border-radius:15px;padding:16px;margin-top:8px}.result .big{font-size:30px;font-weight:800;letter-spacing:-.04em}.result small{color:#c3d6ce}.statrow{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px}.stat{background:#ffffff16;padding:10px;border-radius:10px}.stat b{display:block;font-size:17px}.item{padding:13px 0;border-bottom:1px solid var(--line)}.item:last-child{border:0}.itemtop{display:flex;justify-content:space-between;gap:10px;align-items:start}.item strong{display:block}.item p{margin:4px 0;color:var(--muted);font-size:13px;white-space:pre-wrap}.empty{text-align:center;color:var(--muted);padding:24px 8px}.pill{display:inline-block;background:var(--soft);color:var(--accent);border-radius:99px;padding:4px 8px;font-size:11px;font-weight:700}.hidden{display:none!important}.notice{font-size:12px;color:var(--muted);line-height:1.5}.footer{padding:10px 8px 28px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:420px){.grid{gap:8px}.panel{padding:14px}.head h1{font-size:22px}nav{top:91px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div><div class="brand">Локальная мастерская</div><h1>Мера</h1><div class="sub">Замеры · расчёты · заказы</div></div><span class="pill">ОФЛАЙН</span></div></header>
+<nav id="tabs">
+<button class="active" data-tab="calc">Расчёт</button><button data-tab="clients">Клиенты</button><button data-tab="orders">Заказы</button><button data-tab="data">Данные</button>
+</nav>
+<main>
+<section id="calc" class="tab">
+<div class="panel">
+<h2>Калькулятор площади</h2>
+<div class="field"><label>Что считаем</label><select id="kind"><option value="wall">Стены</option><option value="floor">Пол</option><option value="room">Стены + потолок + пол</option></select></div>
+<div class="grid">
+<div class="field"><label>Длина, м</label><input id="len" type="number" inputmode="decimal" step="0.01" value="5"></div>
+<div class="field"><label>Ширина, м</label><input id="wid" type="number" inputmode="decimal" step="0.01" value="4"></div>
+<div class="field"><label>Высота, м</label><input id="hei" type="number" inputmode="decimal" step="0.01" value="2.7"></div>
+<div class="field"><label>Количество одинаковых комнат</label><input id="qty" type="number" inputmode="numeric" min="1" step="1" value="1"></div>
+</div>
+<div class="grid">
+<div class="field"><label>Площадь проёмов, м²</label><input id="openings" type="number" inputmode="decimal" step="0.01" value="0"></div>
+<div class="field"><label>Цена за м²</label><input id="price" type="number" inputmode="decimal" step="0.01" value="0"></div>
+</div>
+<div class="field"><label>Название объекта / примечание</label><input id="calcNote" placeholder="Например: ванная, объект №1"></div>
+<div class="result"><small>Итоговая площадь</small><div class="big" id="area">48,60 м²</div><div class="statrow"><div class="stat"><small>Стоимость</small><b id="cost">0,00</b></div><div class="stat"><small>До вычета проёмов</small><b id="gross">48,60 м²</b></div></div></div>
+<div class="actions" style="margin-top:13px"><button class="btn" id="saveCalc">Сохранить как заказ</button><button class="btn secondary" id="clearCalc">Очистить</button></div>
+</div>
+<div class="panel"><h2>Как считается</h2><p class="notice">Стены: периметр комнаты × высота − площадь проёмов. Пол: длина × ширина. «Стены + потолок + пол»: площадь стен + площадь пола + площадь потолка − проёмы. Результаты сохраняются только в этом браузере на этом телефоне.</p></div>
+</section>
+<section id="clients" class="tab hidden">
+<div class="panel"><h2 id="clientFormTitle">Новый клиент</h2><input id="clientId" type="hidden">
+<div class="field"><label>Имя / название</label><input id="clientName" placeholder="Имя клиента"></div>
+<div class="grid"><div class="field"><label>Телефон</label><input id="clientPhone" type="tel" placeholder="+..."></div><div class="field"><label>Адрес объекта</label><input id="clientAddress" placeholder="Адрес"></div></div>
+<div class="field"><label>Заметки</label><textarea id="clientNotes" placeholder="Дополнительная информация"></textarea></div>
+<div class="actions"><button class="btn" id="saveClient">Сохранить клиента</button><button class="btn secondary" id="cancelClient">Очистить</button></div></div>
+<div class="panel"><h2>База клиентов</h2><input id="clientSearch" placeholder="Поиск по имени, телефону или адресу"><div id="clientList"></div></div>
+</section>
+<section id="orders" class="tab hidden">
+<div class="panel"><h2>Новый заказ</h2><input id="orderId" type="hidden">
+<div class="field"><label>Название заказа / объекта</label><input id="orderTitle" placeholder="Например: ремонт квартиры"></div>
+<div class="grid"><div class="field"><label>Клиент</label><select id="orderClient"><option value="">Без клиента</option></select></div><div class="field"><label>Статус</label><select id="orderStatus"><option>Новый</option><option>В работе</option><option>Завершён</option><option>Отменён</option></select></div></div>
+<div class="grid"><div class="field"><label>Площадь, м²</label><input id="orderArea" type="number" inputmode="decimal" step=".01"></div><div class="field"><label>Сумма</label><input id="orderTotal" type="number" inputmode="decimal" step=".01"></div></div>
+<div class="field"><label>Примечание</label><textarea id="orderNotes"></textarea></div>
+<div class="actions"><button class="btn" id="saveOrder">Сохранить заказ</button><button class="btn secondary" id="cancelOrder">Очистить</button></div></div>
+<div class="panel"><h2>Список заказов</h2><div id="orderList"></div></div>
+</section>
+<section id="data" class="tab hidden">
+<div class="panel"><h2>Резервная копия</h2><p class="muted">Сделай экспорт, чтобы не потерять клиентов и заказы при очистке данных браузера или смене телефона.</p>
+<div class="actions"><button class="btn" id="exportData">Скачать копию данных</button><button class="btn secondary" id="importBtn">Загрузить копию</button><input type="file" id="importFile" accept="application/json" class="hidden"></div></div>
+<div class="panel"><h2>Хранение данных</h2><p class="notice">Данные хранятся в локальной памяти браузера на этом устройстве. Не очищай данные сайта/браузера, если не сделал резервную копию. При удалении файла приложения данные могут сохраниться в браузере, но это зависит от способа открытия файла.</p>
+<button class="btn danger" id="wipeData">Удалить все данные</button></div>
+</section>
+</main><div class="footer">Мера · автономная версия · данные остаются на устройстве</div>
+<script>
+const KEY='mera_offline_v1';
+let db={clients:[],orders:[]};
+try{db={...db,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){}
+const $=id=>document.getElementById(id);
+const num=id=>Math.max(0,Number($(id).value)||0);
+const money=n=>new Intl.NumberFormat('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function save(){localStorage.setItem(KEY,JSON.stringify(db))}
+function calc(){
+ const l=num('len'),w=num('wid'),h=num('hei'),q=Math.max(1,Math.floor(num('qty'))),o=num('openings'),p=num('price'),k=$('kind').value;
+ let gross=k==='floor'?l*w:k==='wall'?2*(l+w)*h:2*(l+w)*h+2*l*w;
+ gross*=q; const area=Math.max(0,gross-o); $('gross').textContent=money(gross)+' м²';$('area').textContent=money(area)+' м²';$('cost').textContent=money(area*p);
+ return {area,cost:area*p,gross};
+}
+['kind','len','wid','hei','qty','openings','price'].forEach(id=>$(id).addEventListener('input',calc));
+$('clearCalc').onclick=()=>{['len','wid','hei','qty','openings','price','calcNote'].forEach((id,i)=>$(id).value=['5','4','2.7','1','0','0',''][i]);$('kind').value='wall';calc()};
+$('saveCalc').onclick=()=>{const r=calc();$('orderTitle').value=$('calcNote').value.trim()||'Расчёт площади';$('orderArea').value=r.area.toFixed(2);$('orderTotal').value=r.cost.toFixed(2);showTab('orders');$('orderTitle').focus()};
+function showTab(id){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('hidden',x.id!==id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));if(id==='clients')renderClients();if(id==='orders')renderOrders()}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function resetClient(){$('clientId').value='';['clientName','clientPhone','clientAddress','clientNotes'].forEach(x=>$(x).value='');$('clientFormTitle').textContent='Новый клиент'}
+$('cancelClient').onclick=resetClient;
+$('saveClient').onclick=()=>{const name=$('clientName').value.trim();if(!name){alert('Укажи имя клиента');return}const id=$('clientId').value||String(Date.now());const old=db.clients.find(x=>x.id===id);const obj={id,name,phone:$('clientPhone').value.trim(),address:$('clientAddress').value.trim(),notes:$('clientNotes').value.trim(),created:old?.created||new Date().toISOString()};db.clients=db.clients.filter(x=>x.id!==id);db.clients.unshift(obj);save();resetClient();renderClients();renderOrders()};
+function editClient(id){const c=db.clients.find(x=>x.id===id);if(!c)return;$('clientId').value=c.id;$('clientName').value=c.name;$('clientPhone').value=c.phone;$('clientAddress').value=c.address;$('clientNotes').value=c.notes;$('clientFormTitle').textContent='Редактировать клиента';window.scrollTo({top:0,behavior:'smooth'})}
+function delClient(id){if(confirm('Удалить клиента? Заказы останутся без привязки.')){db.clients=db.clients.filter(x=>x.id!==id);db.orders.forEach(o=>{if(o.clientId===id)o.clientId='' });save();renderClients();renderOrders()}}
+function renderClients(){const q=$('clientSearch').value.toLowerCase();const arr=db.clients.filter(c=>(c.name+' '+c.phone+' '+c.address).toLowerCase().includes(q));$('clientList').innerHTML=arr.length?arr.map(c=>`<div class="item"><div class="itemtop"><div><strong>${esc(c.name)}</strong><p>${esc(c.phone)}${c.address?' · '+esc(c.address):''}</p>${c.notes?`<p>${esc(c.notes)}</p>`:''}</div><div class="actions"><button class="btn secondary small" onclick="editClient('${c.id}')">Изменить</button><button class="btn danger small" onclick="delClient('${c.id}')">Удалить</button></div></div></div>`).join(''):'<div class="empty">Клиентов пока нет</div>'}
+$('clientSearch').oninput=renderClients;
+function resetOrder(){$('orderId').value='';['orderTitle','orderArea','orderTotal','orderNotes'].forEach(x=>$(x).value='');$('orderClient').value='';$('orderStatus').value='Новый'}
+$('cancelOrder').onclick=resetOrder;
+$('saveOrder').onclick=()=>{const title=$('orderTitle').value.trim();if(!title){alert('Укажи название заказа');return}const id=$('orderId').value||String(Date.now());db.orders=db.orders.filter(x=>x.id!==id);db.orders.unshift({id,title,clientId:$('orderClient').value,status:$('orderStatus').value,area:num('orderArea'),total:num('orderTotal'),notes:$('orderNotes').value.trim(),created:new Date().toISOString()});save();resetOrder();renderOrders()};
+function editOrder(id){const o=db.orders.find(x=>x.id===id);if(!o)return;$('orderId').value=o.id;$('orderTitle').value=o.title;$('orderClient').value=o.clientId||'';$('orderStatus').value=o.status;$('orderArea').value=o.area;$('orderTotal').value=o.total;$('orderNotes').value=o.notes;window.scrollTo({top:0,behavior:'smooth'})}
+function delOrder(id){if(confirm('Удалить заказ?')){db.orders=db.orders.filter(x=>x.id!==id);save();renderOrders()}}
+function renderOrders(){const sel=$('orderClient');const keep=sel.value;sel.innerHTML='<option value="">Без клиента</option>'+db.clients.map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');if([...sel.options].some(o=>o.value===keep))sel.value=keep;
+$('orderList').innerHTML=db.orders.length?db.orders.map(o=>{const c=db.clients.find(x=>x.id===o.clientId);return `<div class="item"><div class="itemtop"><div><strong>${esc(o.title)}</strong><p>${esc(c?.name||'Без клиента')} · ${new Date(o.created).toLocaleDateString('ru-RU')}</p><p>${money(o.area)} м² · ${money(o.total)}</p>${o.notes?`<p>${esc(o.notes)}</p>`:''}<span class="pill">${esc(o.status)}</span></div><div class="actions"><button class="btn secondary small" onclick="editOrder('${o.id}')">Изменить</button><button class="btn danger small" onclick="delOrder('${o.id}')">Удалить</button></div></div></div>`}).join(''):'<div class="empty">Заказов пока нет</div>'}
+$('exportData').onclick=()=>{const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='mera-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();URL.revokeObjectURL(a.href)};
+$('importBtn').onclick=()=>$('importFile').click();
+$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const d=JSON.parse(await f.text());if(!Array.isArray(d.clients)||!Array.isArray(d.orders))throw Error();if(confirm('Заменить текущие данные данными из копии?')){db=d;save();renderClients();renderOrders();alert('Данные восстановлены')}}catch(_){alert('Не удалось прочитать копию данных')}e.target.value=''};
+$('wipeData').onclick=()=>{if(confirm('Точно удалить всех клиентов и заказы? Это нельзя отменить.')){db={clients:[],orders:[]};save();renderClients();renderOrders();alert('Локальные данные удалены')}};
+calc();renderClients();renderOrders();
+</script>
+</body></html>
